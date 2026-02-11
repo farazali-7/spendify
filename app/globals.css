@@ -3,40 +3,54 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================
+   VAULT — Finance-Grade Design System
+   Trust · Clarity · Quiet Authority
+   ============================================ */
+
 @theme inline {
+  /* --- Core shadcn mappings --- */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
+  --font-display: var(--font-playfair);
+
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* --- Sidebar --- */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* --- Chart (shadcn-compatible, 1–5) --- */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* --- Radius --- */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -44,75 +58,309 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* ==========================================
+     VAULT DESIGN TOKENS — Tailwind Utilities
+     Usage: bg-vault-bg-primary, text-vault-text-primary, etc.
+     ========================================== */
+
+  /* Surfaces & Backgrounds */
+  --color-vault-bg-primary: var(--vault-bg-primary);
+  --color-vault-bg-secondary: var(--vault-bg-secondary);
+  --color-vault-bg-tertiary: var(--vault-bg-tertiary);
+  --color-vault-bg-elevated: var(--vault-bg-elevated);
+
+  /* Brand */
+  --color-vault-navy: var(--vault-brand-primary);
+  --color-vault-forest: var(--vault-brand-secondary);
+  --color-vault-gold: var(--vault-brand-accent);
+
+  /* Text */
+  --color-vault-text-primary: var(--vault-text-primary);
+  --color-vault-text-secondary: var(--vault-text-secondary);
+  --color-vault-text-tertiary: var(--vault-text-tertiary);
+  --color-vault-text-inverse: var(--vault-text-inverse);
+
+  /* Borders */
+  --color-vault-border-default: var(--vault-border-default);
+  --color-vault-border-subtle: var(--vault-border-subtle);
+  --color-vault-border-strong: var(--vault-border-strong);
+
+  /* Interactive */
+  --color-vault-hover: var(--vault-interactive-hover);
+  --color-vault-focus: var(--vault-interactive-focus);
+  --color-vault-selected: var(--vault-interactive-selected);
+
+  /* Semantic — Status */
+  --color-vault-positive: var(--vault-positive);
+  --color-vault-positive-light: var(--vault-positive-light);
+  --color-vault-negative: var(--vault-negative);
+  --color-vault-negative-light: var(--vault-negative-light);
+  --color-vault-warning: var(--vault-warning);
+  --color-vault-warning-light: var(--vault-warning-light);
+  --color-vault-info: var(--vault-info);
+  --color-vault-info-light: var(--vault-info-light);
+
+  /* Profit / Loss */
+  --color-vault-profit-text: var(--vault-profit-text);
+  --color-vault-profit-bg: var(--vault-profit-bg);
+  --color-vault-loss-text: var(--vault-loss-text);
+  --color-vault-loss-bg: var(--vault-loss-bg);
+
+  /* Chart & Data Visualization (extended, 1–8) */
+  --color-vault-chart-1: var(--vault-chart-1);
+  --color-vault-chart-2: var(--vault-chart-2);
+  --color-vault-chart-3: var(--vault-chart-3);
+  --color-vault-chart-4: var(--vault-chart-4);
+  --color-vault-chart-5: var(--vault-chart-5);
+  --color-vault-chart-6: var(--vault-chart-6);
+  --color-vault-chart-7: var(--vault-chart-7);
+  --color-vault-chart-8: var(--vault-chart-8);
+
+  /* Chart Fills (translucent) */
+  --color-vault-chart-fill-1: var(--vault-chart-fill-1);
+  --color-vault-chart-fill-2: var(--vault-chart-fill-2);
+  --color-vault-chart-fill-3: var(--vault-chart-fill-3);
+  --color-vault-chart-fill-4: var(--vault-chart-fill-4);
+
+  /* Tooltip & Overlay */
+  --color-vault-tooltip-bg: var(--vault-tooltip-bg);
+  --color-vault-tooltip-text: var(--vault-tooltip-text);
+  --color-vault-overlay: var(--vault-overlay-bg);
 }
 
+/* ============================================
+   LIGHT THEME (default)
+   ============================================ */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /* --- shadcn core variables mapped to Vault --- */
+  --background: #FAFAF7;
+  --foreground: #1A1F26;
+
+  --card: #FFFFFF;
+  --card-foreground: #1A1F26;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1F26;
+
+  --primary: #1A2E44;
+  --primary-foreground: #FAFAF7;
+
+  --secondary: #F2F0EB;
+  --secondary-foreground: #1A1F26;
+
+  --muted: #E8E5DE;
+  --muted-foreground: #5A6068;
+
+  --accent: #C4975A;
+  --accent-foreground: #FFFFFF;
+
+  --destructive: #B54545;
+
+  --border: #E2DFD8;
+  --input: #E2DFD8;
+  --ring: #1A2E44;
+
+  /* Charts (shadcn 1-5) */
+  --chart-1: #1A2E44;
+  --chart-2: #C4975A;
+  --chart-3: #2D7A5F;
+  --chart-4: #B54545;
+  --chart-5: #7B6B8A;
+
+  /* Sidebar */
+  --sidebar: #F2F0EB;
+  --sidebar-foreground: #1A1F26;
+  --sidebar-primary: #1A2E44;
+  --sidebar-primary-foreground: #FAFAF7;
+  --sidebar-accent: #E8E5DE;
+  --sidebar-accent-foreground: #1A1F26;
+  --sidebar-border: #E2DFD8;
+  --sidebar-ring: #1A2E44;
+
+  /* --- VAULT DESIGN TOKENS --- */
+
+  /* Surfaces & Backgrounds */
+  --vault-bg-primary: #FAFAF7;
+  --vault-bg-secondary: #F2F0EB;
+  --vault-bg-tertiary: #E8E5DE;
+  --vault-bg-elevated: #FFFFFF;
+
+  /* Brand */
+  --vault-brand-primary: #1A2E44;
+  --vault-brand-secondary: #2D4A3E;
+  --vault-brand-accent: #C4975A;
+
+  /* Text Hierarchy */
+  --vault-text-primary: #1A1F26;
+  --vault-text-secondary: #5A6068;
+  --vault-text-tertiary: #8C919A;
+  --vault-text-inverse: #FAFAF7;
+
+  /* Borders */
+  --vault-border-default: #E2DFD8;
+  --vault-border-subtle: #EDEBE6;
+  --vault-border-strong: #C8C3BA;
+
+  /* Interactive States */
+  --vault-interactive-hover: #F5F3EE;
+  --vault-interactive-focus: #1A2E44;
+  --vault-interactive-selected: rgba(26, 46, 68, 0.08);
+
+  /* Semantic — Status */
+  --vault-positive: #2D7A5F;
+  --vault-positive-light: #E8F5EE;
+  --vault-negative: #B54545;
+  --vault-negative-light: #FAEAEA;
+  --vault-warning: #C4875A;
+  --vault-warning-light: #FFF4E8;
+  --vault-info: #4A7FA5;
+  --vault-info-light: #EAF2F8;
+
+  /* Profit / Loss */
+  --vault-profit-text: #1D6B4D;
+  --vault-profit-bg: #E8F5EE;
+  --vault-loss-text: #A33B3B;
+  --vault-loss-bg: #FAEAEA;
+
+  /* Chart & Data Visualization (1–8) */
+  --vault-chart-1: #1A2E44;
+  --vault-chart-2: #C4975A;
+  --vault-chart-3: #2D7A5F;
+  --vault-chart-4: #B54545;
+  --vault-chart-5: #7B6B8A;
+  --vault-chart-6: #4A7FA5;
+  --vault-chart-7: #8B7355;
+  --vault-chart-8: #5A8A7A;
+
+  /* Chart Fills (translucent area fills) */
+  --vault-chart-fill-1: rgba(26, 46, 68, 0.12);
+  --vault-chart-fill-2: rgba(196, 151, 90, 0.15);
+  --vault-chart-fill-3: rgba(45, 122, 95, 0.12);
+  --vault-chart-fill-4: rgba(181, 69, 69, 0.12);
+
+  /* Tooltip & Overlay */
+  --vault-tooltip-bg: #1A2E44;
+  --vault-tooltip-text: #F2F0EB;
+  --vault-overlay-bg: rgba(26, 31, 38, 0.5);
 }
 
+/* ============================================
+   DARK THEME
+   ============================================ */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* --- shadcn core variables — dark Vault --- */
+  --background: #111820;
+  --foreground: #E8E5DE;
+
+  --card: #1A2332;
+  --card-foreground: #E8E5DE;
+
+  --popover: #1A2332;
+  --popover-foreground: #E8E5DE;
+
+  --primary: #C4975A;
+  --primary-foreground: #111820;
+
+  --secondary: #1E2A3A;
+  --secondary-foreground: #E8E5DE;
+
+  --muted: #1E2A3A;
+  --muted-foreground: #8C919A;
+
+  --accent: #C4975A;
+  --accent-foreground: #111820;
+
+  --destructive: #D45B5B;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.10);
+  --ring: #C4975A;
+
+  /* Charts (shadcn 1-5) */
+  --chart-1: #5B8AB5;
+  --chart-2: #D4A96A;
+  --chart-3: #4D9A7F;
+  --chart-4: #D45B5B;
+  --chart-5: #9B8BAA;
+
+  /* Sidebar */
+  --sidebar: #141C28;
+  --sidebar-foreground: #E8E5DE;
+  --sidebar-primary: #C4975A;
+  --sidebar-primary-foreground: #111820;
+  --sidebar-accent: #1E2A3A;
+  --sidebar-accent-foreground: #E8E5DE;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #C4975A;
+
+  /* --- VAULT DESIGN TOKENS (dark) --- */
+
+  /* Surfaces & Backgrounds */
+  --vault-bg-primary: #111820;
+  --vault-bg-secondary: #1A2332;
+  --vault-bg-tertiary: #1E2A3A;
+  --vault-bg-elevated: #243244;
+
+  /* Brand */
+  --vault-brand-primary: #5B8AB5;
+  --vault-brand-secondary: #4D9A7F;
+  --vault-brand-accent: #D4A96A;
+
+  /* Text Hierarchy */
+  --vault-text-primary: #E8E5DE;
+  --vault-text-secondary: #A0A5AD;
+  --vault-text-tertiary: #6B7280;
+  --vault-text-inverse: #111820;
+
+  /* Borders */
+  --vault-border-default: rgba(255, 255, 255, 0.08);
+  --vault-border-subtle: rgba(255, 255, 255, 0.05);
+  --vault-border-strong: rgba(255, 255, 255, 0.15);
+
+  /* Interactive States */
+  --vault-interactive-hover: rgba(255, 255, 255, 0.05);
+  --vault-interactive-focus: #C4975A;
+  --vault-interactive-selected: rgba(196, 151, 90, 0.12);
+
+  /* Semantic — Status */
+  --vault-positive: #4D9A7F;
+  --vault-positive-light: rgba(45, 122, 95, 0.15);
+  --vault-negative: #D45B5B;
+  --vault-negative-light: rgba(181, 69, 69, 0.15);
+  --vault-warning: #D4A96A;
+  --vault-warning-light: rgba(196, 135, 90, 0.15);
+  --vault-info: #5B8AB5;
+  --vault-info-light: rgba(74, 127, 165, 0.15);
+
+  /* Profit / Loss */
+  --vault-profit-text: #5FBE96;
+  --vault-profit-bg: rgba(45, 122, 95, 0.15);
+  --vault-loss-text: #E87171;
+  --vault-loss-bg: rgba(181, 69, 69, 0.15);
+
+  /* Chart & Data Visualization (1–8) */
+  --vault-chart-1: #5B8AB5;
+  --vault-chart-2: #D4A96A;
+  --vault-chart-3: #4D9A7F;
+  --vault-chart-4: #D45B5B;
+  --vault-chart-5: #9B8BAA;
+  --vault-chart-6: #5B8AB5;
+  --vault-chart-7: #AB9375;
+  --vault-chart-8: #7AAA9A;
+
+  /* Chart Fills (translucent area fills) */
+  --vault-chart-fill-1: rgba(91, 138, 181, 0.15);
+  --vault-chart-fill-2: rgba(212, 169, 106, 0.15);
+  --vault-chart-fill-3: rgba(77, 154, 127, 0.15);
+  --vault-chart-fill-4: rgba(212, 91, 91, 0.15);
+
+  /* Tooltip & Overlay */
+  --vault-tooltip-bg: #243244;
+  --vault-tooltip-text: #E8E5DE;
+  --vault-overlay-bg: rgba(0, 0, 0, 0.6);
 }
 
 @layer base {
@@ -122,4 +370,58 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ============================================
+   Staggered Reveal Animations
+   ============================================ */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  opacity: 0;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+  opacity: 0;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  opacity: 0;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }

@@ -1,12 +1,23 @@
-import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/landing/navbar"
+import { HeroSection } from "@/components/landing/hero-section"
+import { ProblemSection } from "@/components/landing/problem-section"
+import { FeaturesSection } from "@/components/landing/features-section"
+import { DemoSection } from "@/components/landing/demo-section"
+import { PhilosophySection } from "@/components/landing/philosophy-section"
+import { CtaSection } from "@/components/landing/cta-section"
+import { FooterSection } from "@/components/landing/footer-section"
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-       <div>hello world</div>
-       <Button variant="destructive">Click me</Button>
-      </main>
+    <div className="dark min-h-screen bg-background text-foreground">
+      <Navbar />
+      <HeroSection />
+      <ProblemSection />
+      <FeaturesSection />
+      <DemoSection />
+      <PhilosophySection />
+      <CtaSection />
+      <FooterSection />
     </div>
-  );
+  )
 }
