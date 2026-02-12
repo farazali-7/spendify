@@ -9,7 +9,7 @@ import { FooterSection } from "@/components/landing/footer-section"
 
 export default function Home() {
   return (
-    <div className="dark min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <HeroSection />
       <ProblemSection />

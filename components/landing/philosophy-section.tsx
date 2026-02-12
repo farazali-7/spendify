@@ -23,10 +23,7 @@ const principles = [
 
 export function PhilosophySection() {
   return (
-    <section
-      id="philosophy"
-      className="py-24 md:py-32 border-t border-white/[0.04]"
-    >
+    <section id="philosophy" className="py-24 md:py-32 border-t border-border/50">
       <div className="max-w-6xl mx-auto px-6">
         <p className="text-xs uppercase tracking-[0.2em] text-vault-positive/50 mb-3 font-medium">
           WHY THIS EXISTS
@@ -44,7 +41,7 @@ export function PhilosophySection() {
               in salary felt like nothing by the 25th of every month.
             </p>
             <p className="text-muted-foreground leading-[1.8] text-[15px]">
-              The answer was always the same — no system. Plenty of apps.
+              The answer was always the same &mdash; no system. Plenty of apps.
               Plenty of accounts. Zero structure.
             </p>
             <p className="text-foreground/70 font-display italic text-xl mt-4">
@@ -57,7 +54,7 @@ export function PhilosophySection() {
             {principles.map(({ num, title, desc }, i) => (
               <div
                 key={num}
-                className={`py-5 ${i < principles.length - 1 ? "border-b border-white/[0.05]" : ""} ${i === 0 ? "pt-0" : ""}`}
+                className={`py-5 ${i < principles.length - 1 ? "border-b border-border/50" : ""} ${i === 0 ? "pt-0" : ""}`}
               >
                 <span className="font-mono text-sm text-vault-positive/30">
                   {num}

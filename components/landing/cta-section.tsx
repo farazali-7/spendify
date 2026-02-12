@@ -3,10 +3,10 @@ import { ArrowRight } from "lucide-react"
 
 export function CtaSection() {
   return (
-    <section className="relative py-28 md:py-36 border-t border-white/[0.04]">
+    <section className="relative py-28 md:py-36 border-t border-border/50">
       {/* Radial glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[500px] h-[500px] bg-[#2d7a5f]/[0.04] blur-[150px] rounded-full" />
+        <div className="w-[500px] h-[500px] bg-vault-positive/3 dark:bg-vault-positive/4 blur-[150px] rounded-full" />
       </div>
 
       <div className="relative text-center max-w-2xl mx-auto px-6">

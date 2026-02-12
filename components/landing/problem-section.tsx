@@ -4,12 +4,12 @@ const problems = [
   {
     icon: AlertTriangle,
     title: "Scattered Accounts",
-    body: "Money split across 3–4 banks, wallets, and apps. No single view of where you actually stand.",
+    body: "Money split across 3\u20134 banks, wallets, and apps. No single view of where you actually stand.",
   },
   {
     icon: Receipt,
     title: "Invisible Liabilities",
-    body: "Credit cards, EMIs, and borrowed money quietly compounding — completely untracked, completely invisible.",
+    body: "Credit cards, EMIs, and borrowed money quietly compounding \u2014 completely untracked, completely invisible.",
   },
   {
     icon: EyeOff,
@@ -20,7 +20,7 @@ const problems = [
 
 export function ProblemSection() {
   return (
-    <section className="py-24 md:py-32 border-t border-white/[0.04]">
+    <section className="py-24 md:py-32 border-t border-border/50">
       <div className="max-w-6xl mx-auto px-6">
         {/* Headline */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -39,10 +39,10 @@ export function ProblemSection() {
           {problems.map(({ icon: Icon, title, body }) => (
             <div
               key={title}
-              className="p-6 rounded-xl bg-white/[0.015] border border-white/[0.06] hover:bg-white/[0.025] transition-colors duration-300"
+              className="p-6 rounded-xl bg-card border border-border hover:bg-muted/30 transition-colors duration-300"
             >
-              <div className="w-10 h-10 rounded-lg bg-red-500/[0.08] border border-red-500/10 flex items-center justify-center mb-5">
-                <Icon className="w-5 h-5 text-red-400/70" />
+              <div className="w-10 h-10 rounded-lg bg-destructive/[0.08] border border-destructive/10 flex items-center justify-center mb-5">
+                <Icon className="w-5 h-5 text-destructive/70" />
               </div>
               <h3 className="font-semibold text-foreground/80 mb-2">
                 {title}
@@ -57,7 +57,7 @@ export function ProblemSection() {
         {/* Connector */}
         <div className="flex items-center gap-4 justify-center mt-16">
           <div className="h-px flex-1 max-w-24 bg-gradient-to-r from-transparent to-vault-positive/20" />
-          <p className="text-[13px] text-vault-positive/40 tracking-wide font-medium">
+          <p className="text-[13px] text-vault-positive/50 tracking-wide font-medium">
             Spendify unifies everything into one system
           </p>
           <div className="h-px flex-1 max-w-24 bg-gradient-to-r from-vault-positive/20 to-transparent" />

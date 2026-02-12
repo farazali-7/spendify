@@ -15,12 +15,12 @@ export function DemoSection() {
           </p>
         </div>
 
-        {/* Dashboard Mockup */}
+        {/* Dashboard Mockup (always dark — it's an app preview) */}
         <div className="relative max-w-5xl mx-auto">
           {/* Glow */}
-          <div className="absolute -inset-8 bg-[#2d7a5f]/[0.05] blur-[100px] rounded-3xl pointer-events-none" />
+          <div className="absolute -inset-8 bg-vault-positive/[0.03] dark:bg-vault-positive/[0.05] blur-[100px] rounded-3xl pointer-events-none" />
 
-          <div className="relative rounded-2xl border border-white/[0.07] bg-[#0c1018] shadow-2xl overflow-hidden">
+          <div className="relative rounded-2xl border border-black/10 dark:border-white/[0.07] bg-[#0c1018] shadow-2xl overflow-hidden">
             {/* Browser Chrome */}
             <div className="flex items-center gap-3 px-5 py-3 border-b border-white/[0.06] bg-white/[0.015]">
               <div className="flex gap-1.5">
@@ -39,27 +39,9 @@ export function DemoSection() {
             <div className="p-4 md:p-6 space-y-4">
               {/* Stats Row */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <StatCard
-                  label="Assets"
-                  value="₹14,82,300"
-                  change="+4.2%"
-                  positive
-                  sparkUp
-                />
-                <StatCard
-                  label="Liabilities"
-                  value="₹1,64,800"
-                  change="−₹8,200"
-                  positive
-                  sparkDown
-                />
-                <StatCard
-                  label="Net Worth"
-                  value="₹13,17,500"
-                  change="+₹52K"
-                  positive
-                  sparkUp
-                />
+                <StatCard label="Assets" value="₹14,82,300" change="+4.2%" positive sparkUp />
+                <StatCard label="Liabilities" value="₹1,64,800" change="−₹8,200" positive sparkDown />
+                <StatCard label="Net Worth" value="₹13,17,500" change="+₹52K" positive sparkUp />
                 <StatCard label="This Month" value="₹42,860" sub="spent" />
               </div>
 
@@ -69,23 +51,13 @@ export function DemoSection() {
                 <div className="md:col-span-2 p-5 rounded-xl bg-white/[0.02] border border-white/[0.05]">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <p className="text-[11px] text-white/25 uppercase tracking-[0.15em]">
-                        Spending Trend
-                      </p>
-                      <p className="text-[10px] text-white/15 mt-0.5">
-                        6 Months · Bi-weekly
-                      </p>
+                      <p className="text-[11px] text-white/25 uppercase tracking-[0.15em]">Spending Trend</p>
+                      <p className="text-[10px] text-white/15 mt-0.5">6 Months · Bi-weekly</p>
                     </div>
                     <div className="flex gap-1">
-                      <span className="px-2.5 py-1 rounded text-[9px] text-white/20 bg-white/[0.03] cursor-pointer hover:bg-white/[0.06] transition-colors">
-                        1M
-                      </span>
-                      <span className="px-2.5 py-1 rounded text-[9px] text-white/20 bg-white/[0.03] cursor-pointer hover:bg-white/[0.06] transition-colors">
-                        3M
-                      </span>
-                      <span className="px-2.5 py-1 rounded text-[9px] text-white/40 bg-white/[0.07]">
-                        6M
-                      </span>
+                      <span className="px-2.5 py-1 rounded text-[9px] text-white/20 bg-white/[0.03] cursor-pointer hover:bg-white/[0.06] transition-colors">1M</span>
+                      <span className="px-2.5 py-1 rounded text-[9px] text-white/20 bg-white/[0.03] cursor-pointer hover:bg-white/[0.06] transition-colors">3M</span>
+                      <span className="px-2.5 py-1 rounded text-[9px] text-white/40 bg-white/[0.07]">6M</span>
                     </div>
                   </div>
 
@@ -106,23 +78,15 @@ export function DemoSection() {
                   {/* Month Labels */}
                   <div className="flex justify-between">
                     {months.map((m) => (
-                      <span
-                        key={m}
-                        className="text-[9px] text-white/15 w-[calc(100%/6)] text-center"
-                      >
-                        {m}
-                      </span>
+                      <span key={m} className="text-[9px] text-white/15 w-[calc(100%/6)] text-center">{m}</span>
                     ))}
                   </div>
                 </div>
 
                 {/* Right Panel — 1/3 */}
                 <div className="space-y-4">
-                  {/* Accounts */}
                   <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-                    <p className="text-[10px] text-white/20 uppercase tracking-[0.15em] mb-3">
-                      Accounts
-                    </p>
+                    <p className="text-[10px] text-white/20 uppercase tracking-[0.15em] mb-3">Accounts</p>
                     <div className="space-y-2.5">
                       <PanelRow name="HDFC Primary" value="₹4,82,300" />
                       <PanelRow name="SBI Savings" value="₹6,20,000" />
@@ -131,22 +95,11 @@ export function DemoSection() {
                     </div>
                   </div>
 
-                  {/* Liabilities */}
                   <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-                    <p className="text-[10px] text-white/20 uppercase tracking-[0.15em] mb-3">
-                      Liabilities
-                    </p>
+                    <p className="text-[10px] text-white/20 uppercase tracking-[0.15em] mb-3">Liabilities</p>
                     <div className="space-y-3">
-                      <LiabilityRow
-                        name="ICICI Credit Card"
-                        value="₹1,24,500"
-                        rate="18% APR"
-                      />
-                      <LiabilityRow
-                        name="Personal Loan"
-                        value="₹40,300"
-                        rate="12% APR"
-                      />
+                      <LiabilityRow name="ICICI Credit Card" value="₹1,24,500" rate="18% APR" />
+                      <LiabilityRow name="Personal Loan" value="₹40,300" rate="12% APR" />
                     </div>
                   </div>
                 </div>
@@ -159,64 +112,25 @@ export function DemoSection() {
   )
 }
 
-/* ─── Sub-components ────────────────────────────────── */
-
-function StatCard({
-  label,
-  value,
-  change,
-  sub,
-  positive,
-  sparkUp,
-  sparkDown,
-}: {
-  label: string
-  value: string
-  change?: string
-  sub?: string
-  positive?: boolean
-  sparkUp?: boolean
-  sparkDown?: boolean
+function StatCard({ label, value, change, sub, positive, sparkUp, sparkDown }: {
+  label: string; value: string; change?: string; sub?: string; positive?: boolean; sparkUp?: boolean; sparkDown?: boolean
 }) {
   return (
     <div className="p-3.5 rounded-lg bg-white/[0.025] border border-white/[0.05]">
-      <p className="text-[9px] text-white/20 uppercase tracking-[0.15em] mb-1.5">
-        {label}
-      </p>
-      <p className="text-base md:text-lg font-mono text-white/80 font-medium leading-none">
-        {value}
-      </p>
+      <p className="text-[9px] text-white/20 uppercase tracking-[0.15em] mb-1.5">{label}</p>
+      <p className="text-base md:text-lg font-mono text-white/80 font-medium leading-none">{value}</p>
       {change && (
         <div className="flex items-center gap-1.5 mt-2">
-          <svg
-            width="24"
-            height="10"
-            viewBox="0 0 24 10"
-            fill="none"
-            className="opacity-50"
-          >
+          <svg width="24" height="10" viewBox="0 0 24 10" fill="none" className="opacity-50">
             <path
-              d={
-                sparkDown
-                  ? "M1,2 L6,4 L12,6 L18,7 L23,9"
-                  : "M1,9 L6,7 L12,5 L18,3 L23,1"
-              }
-              stroke={positive ? "#4D9A7F" : "#D45B5B"}
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              fill="none"
+              d={sparkDown ? "M1,2 L6,4 L12,6 L18,7 L23,9" : "M1,9 L6,7 L12,5 L18,3 L23,1"}
+              stroke={positive ? "#4D9A7F" : "#D45B5B"} strokeWidth="1.2" strokeLinecap="round" fill="none"
             />
           </svg>
-          <span
-            className={`text-[10px] font-mono ${positive ? "text-emerald-400/60" : "text-red-400/60"}`}
-          >
-            {change}
-          </span>
+          <span className={`text-[10px] font-mono ${positive ? "text-emerald-400/60" : "text-red-400/60"}`}>{change}</span>
         </div>
       )}
-      {sub && (
-        <p className="text-[9px] text-white/15 mt-1.5">{sub}</p>
-      )}
+      {sub && <p className="text-[9px] text-white/15 mt-1.5">{sub}</p>}
     </div>
   )
 }
@@ -230,21 +144,11 @@ function PanelRow({ name, value }: { name: string; value: string }) {
   )
 }
 
-function LiabilityRow({
-  name,
-  value,
-  rate,
-}: {
-  name: string
-  value: string
-  rate: string
-}) {
+function LiabilityRow({ name, value, rate }: { name: string; value: string; rate: string }) {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <span className="text-[11px] text-white/30 block leading-tight">
-          {name}
-        </span>
+        <span className="text-[11px] text-white/30 block leading-tight">{name}</span>
         <span className="text-[8px] text-red-400/40">{rate}</span>
       </div>
       <span className="text-[11px] font-mono text-red-400/50">{value}</span>

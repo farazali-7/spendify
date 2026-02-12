@@ -4,28 +4,28 @@ const features = [
   {
     icon: Landmark,
     title: "Multi-Account Tracking",
-    body: "Track 3+ banks, digital wallets, and cash — in real time, in one place. No more switching between five banking apps to figure out what you have.",
+    body: "Track 3+ banks, digital wallets, and cash \u2014 in real time, in one place. No more switching between five banking apps to figure out what you have.",
   },
   {
     icon: BarChart3,
     title: "Smart Expense System",
-    body: "Variable and fixed expenses in one intelligent flow. Categorized, tagged, and tied to source accounts. Not a spreadsheet — a system that thinks with you.",
+    body: "Variable and fixed expenses in one intelligent flow. Categorized, tagged, and tied to source accounts. Not a spreadsheet \u2014 a system that thinks with you.",
   },
   {
     icon: Target,
     title: "Liability & Interest Tracking",
-    body: "Know exactly what you owe and what it\u2019s costing you. Principal, interest paid, remaining balance — the full picture, not the version your bank wants you to see.",
+    body: "Know exactly what you owe and what it\u2019s costing you. Principal, interest paid, remaining balance \u2014 the full picture, not the version your bank wants you to see.",
   },
   {
     icon: LineChart,
     title: "Wealth Dashboard",
-    body: "Net worth trends over time. Assets minus liabilities. The single number that tells you whether you\u2019re actually getting ahead — or just running in place.",
+    body: "Net worth trends over time. Assets minus liabilities. The single number that tells you whether you\u2019re actually getting ahead \u2014 or just running in place.",
   },
 ]
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-24 md:py-32 border-t border-white/[0.04]">
+    <section id="features" className="py-24 md:py-32 border-t border-border/50">
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-16">
@@ -48,12 +48,12 @@ export function FeaturesSection() {
           {features.map(({ icon: Icon, title, body }) => (
             <div
               key={title}
-              className="group relative p-6 rounded-xl border border-white/[0.06] bg-white/[0.01] hover:bg-white/[0.025] transition-all duration-300"
+              className="group relative p-6 rounded-xl border border-border bg-card hover:bg-muted/30 transition-all duration-300"
             >
               {/* Hover top accent line */}
               <div className="absolute top-0 left-6 right-6 h-px bg-vault-positive/30 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
 
-              <div className="w-10 h-10 rounded-lg bg-vault-positive/[0.07] border border-vault-positive/10 flex items-center justify-center mb-5">
+              <div className="w-10 h-10 rounded-lg bg-vault-positive/7 border border-vault-positive/10 flex items-center justify-center mb-5">
                 <Icon className="w-5 h-5 text-vault-positive" />
               </div>
 

@@ -5,8 +5,8 @@ export function HeroSection() {
   return (
     <section className="pt-28 pb-20 md:pt-36 md:pb-28 relative overflow-hidden">
       {/* Background atmosphere */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#1a2e44]/20 blur-[180px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#c4975a]/[0.06] blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-vault-navy/[0.07] dark:bg-vault-navy/20 blur-[180px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-vault-gold/[0.04] dark:bg-vault-gold/[0.06] blur-[140px] rounded-full pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-6 relative">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -74,7 +74,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Right — Dashboard Mockup */}
+          {/* Right — Dashboard Mockup (always dark) */}
           <div
             className="animate-slide-in-right"
             style={{ animationDelay: "0.3s" }}
@@ -87,7 +87,7 @@ export function HeroSection() {
   )
 }
 
-/* ─── Dashboard Mockup ─────────────────────────────── */
+/* ─── Dashboard Mockup (self-contained dark preview) ── */
 
 function HeroDashboard() {
   return (
@@ -95,7 +95,7 @@ function HeroDashboard() {
       {/* Ambient glow */}
       <div className="absolute -inset-6 bg-gradient-to-br from-[#2d7a5f]/[0.07] via-transparent to-[#c4975a]/[0.05] blur-3xl rounded-3xl pointer-events-none" />
 
-      <div className="relative rounded-2xl border border-white/[0.08] bg-[#0c1018] shadow-2xl overflow-hidden animate-float" style={{ animationDelay: "1s" }}>
+      <div className="relative rounded-2xl border border-black/10 dark:border-white/[0.08] bg-[#0c1018] shadow-2xl overflow-hidden animate-float" style={{ animationDelay: "1s" }}>
         {/* Browser Chrome */}
         <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.06] bg-white/[0.015]">
           <div className="flex gap-1.5">
@@ -129,46 +129,15 @@ function HeroDashboard() {
                   <span className="text-[10px] text-white/20">this month</span>
                 </div>
               </div>
-              {/* Sparkline */}
-              <svg
-                width="80"
-                height="40"
-                viewBox="0 0 80 40"
-                fill="none"
-                className="mt-1"
-              >
+              <svg width="80" height="40" viewBox="0 0 80 40" fill="none" className="mt-1">
                 <defs>
-                  <linearGradient
-                    id="heroSparkGrad"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop
-                      offset="0%"
-                      stopColor="#4ade80"
-                      stopOpacity="0.15"
-                    />
-                    <stop
-                      offset="100%"
-                      stopColor="#4ade80"
-                      stopOpacity="0"
-                    />
+                  <linearGradient id="heroSparkGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#4ade80" stopOpacity="0.15" />
+                    <stop offset="100%" stopColor="#4ade80" stopOpacity="0" />
                   </linearGradient>
                 </defs>
-                <path
-                  d="M2,32 C10,30 15,28 20,24 C25,20 30,22 35,18 C40,14 45,16 50,12 C55,8 60,10 65,6 C70,4 75,5 78,3"
-                  stroke="#4ade80"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  fill="none"
-                  opacity="0.5"
-                />
-                <path
-                  d="M2,32 C10,30 15,28 20,24 C25,20 30,22 35,18 C40,14 45,16 50,12 C55,8 60,10 65,6 C70,4 75,5 78,3 V40 H2 Z"
-                  fill="url(#heroSparkGrad)"
-                />
+                <path d="M2,32 C10,30 15,28 20,24 C25,20 30,22 35,18 C40,14 45,16 50,12 C55,8 60,10 65,6 C70,4 75,5 78,3" stroke="#4ade80" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.5" />
+                <path d="M2,32 C10,30 15,28 20,24 C25,20 30,22 35,18 C40,14 45,16 50,12 C55,8 60,10 65,6 C70,4 75,5 78,3 V40 H2 Z" fill="url(#heroSparkGrad)" />
               </svg>
             </div>
           </div>
@@ -178,63 +147,34 @@ function HeroDashboard() {
             <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
               <div className="flex items-center gap-1.5 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/60" />
-                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">
-                  HDFC Savings
-                </p>
+                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">HDFC Savings</p>
               </div>
               <p className="text-[13px] font-mono text-white/70">₹4,82,300</p>
             </div>
             <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
               <div className="flex items-center gap-1.5 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-400/40" />
-                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">
-                  Paytm Wallet
-                </p>
+                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">Paytm Wallet</p>
               </div>
               <p className="text-[13px] font-mono text-white/70">₹3,200</p>
             </div>
             <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
               <div className="flex items-center gap-1.5 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-400/50" />
-                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">
-                  ICICI Credit
-                </p>
+                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">ICICI Credit</p>
               </div>
               <p className="text-[13px] font-mono text-white/70">₹1,24,500</p>
-              <span className="text-[8px] text-amber-400/60 mt-1 inline-block">
-                Due 15d
-              </span>
+              <span className="text-[8px] text-amber-400/60 mt-1 inline-block">Due 15d</span>
             </div>
           </div>
 
           {/* Recent Transactions */}
           <div>
-            <p className="text-[9px] text-white/20 uppercase tracking-[0.15em] mb-2.5">
-              Recent Transactions
-            </p>
+            <p className="text-[9px] text-white/20 uppercase tracking-[0.15em] mb-2.5">Recent Transactions</p>
             <div>
-              <TransactionRow
-                initials="SW"
-                name="Swiggy"
-                amount="−₹486"
-                color="orange"
-                negative
-              />
-              <TransactionRow
-                initials="SA"
-                name="Salary"
-                amount="+₹1,20,000"
-                color="emerald"
-                positive
-              />
-              <TransactionRow
-                initials="EB"
-                name="Electricity"
-                amount="−₹2,340"
-                color="yellow"
-                negative
-                last
-              />
+              <TransactionRow initials="SW" name="Swiggy" amount="−₹486" color="orange" negative />
+              <TransactionRow initials="SA" name="Salary" amount="+₹1,20,000" color="emerald" positive />
+              <TransactionRow initials="EB" name="Electricity" amount="−₹2,340" color="yellow" negative last />
             </div>
           </div>
         </div>
@@ -243,22 +183,8 @@ function HeroDashboard() {
   )
 }
 
-function TransactionRow({
-  initials,
-  name,
-  amount,
-  color,
-  positive,
-  negative,
-  last,
-}: {
-  initials: string
-  name: string
-  amount: string
-  color: string
-  positive?: boolean
-  negative?: boolean
-  last?: boolean
+function TransactionRow({ initials, name, amount, color, positive, negative, last }: {
+  initials: string; name: string; amount: string; color: string; positive?: boolean; negative?: boolean; last?: boolean
 }) {
   const colorMap: Record<string, { bg: string; text: string }> = {
     orange: { bg: "bg-orange-500/[0.08]", text: "text-orange-400/60" },
@@ -268,20 +194,14 @@ function TransactionRow({
   const c = colorMap[color] ?? colorMap.orange
 
   return (
-    <div
-      className={`flex items-center justify-between py-2 ${last ? "" : "border-b border-white/[0.04]"}`}
-    >
+    <div className={`flex items-center justify-between py-2 ${last ? "" : "border-b border-white/[0.04]"}`}>
       <div className="flex items-center gap-2.5">
-        <div
-          className={`w-6 h-6 rounded-md ${c.bg} flex items-center justify-center`}
-        >
+        <div className={`w-6 h-6 rounded-md ${c.bg} flex items-center justify-center`}>
           <span className={`text-[9px] ${c.text}`}>{initials}</span>
         </div>
         <span className="text-[12px] text-white/40">{name}</span>
       </div>
-      <span
-        className={`text-[12px] font-mono ${positive ? "text-emerald-400/70" : negative ? "text-red-400/70" : "text-white/50"}`}
-      >
+      <span className={`text-[12px] font-mono ${positive ? "text-emerald-400/70" : negative ? "text-red-400/70" : "text-white/50"}`}>
         {amount}
       </span>
     </div>
