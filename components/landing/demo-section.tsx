@@ -30,7 +30,7 @@ export function DemoSection() {
               </div>
               <div className="flex-1 flex justify-center">
                 <div className="px-10 py-1.5 rounded-lg bg-white/[0.04] text-[11px] text-white/20 font-mono">
-                  app.spendify.in/dashboard
+                  app.spendify.pk/dashboard
                 </div>
               </div>
             </div>
@@ -39,10 +39,10 @@ export function DemoSection() {
             <div className="p-4 md:p-6 space-y-4">
               {/* Stats Row */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <StatCard label="Assets" value="₹14,82,300" change="+4.2%" positive sparkUp />
-                <StatCard label="Liabilities" value="₹1,64,800" change="−₹8,200" positive sparkDown />
-                <StatCard label="Net Worth" value="₹13,17,500" change="+₹52K" positive sparkUp />
-                <StatCard label="This Month" value="₹42,860" sub="spent" />
+                <StatCard label="Assets" value="Rs 22,45,000" change="+4.2%" positive sparkUp />
+                <StatCard label="Liabilities" value="Rs 3,20,000" change="−Rs 12K" positive sparkDown />
+                <StatCard label="Net Worth" value="Rs 19,25,000" change="+Rs 85K" positive sparkUp />
+                <StatCard label="This Month" value="Rs 78,640" sub="spent" />
               </div>
 
               {/* Main Grid */}
@@ -88,18 +88,18 @@ export function DemoSection() {
                   <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
                     <p className="text-[10px] text-white/20 uppercase tracking-[0.15em] mb-3">Accounts</p>
                     <div className="space-y-2.5">
-                      <PanelRow name="HDFC Primary" value="₹4,82,300" />
-                      <PanelRow name="SBI Savings" value="₹6,20,000" />
-                      <PanelRow name="Paytm Wallet" value="₹3,200" />
-                      <PanelRow name="Cash" value="₹12,800" />
+                      <PanelRow name="HBL Savings" value="Rs 6,45,000" />
+                      <PanelRow name="Meezan Current" value="Rs 9,80,000" />
+                      <PanelRow name="JazzCash" value="Rs 12,500" />
+                      <PanelRow name="Cash" value="Rs 28,000" />
                     </div>
                   </div>
 
                   <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
                     <p className="text-[10px] text-white/20 uppercase tracking-[0.15em] mb-3">Liabilities</p>
                     <div className="space-y-3">
-                      <LiabilityRow name="ICICI Credit Card" value="₹1,24,500" rate="18% APR" />
-                      <LiabilityRow name="Personal Loan" value="₹40,300" rate="12% APR" />
+                      <LiabilityRow name="Meezan Credit Card" value="Rs 1,85,000" rate="Profit Rate" />
+                      <LiabilityRow name="HBL Personal Loan" value="Rs 1,35,000" rate="KIBOR + 3%" />
                     </div>
                   </div>
                 </div>

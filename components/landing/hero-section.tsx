@@ -25,7 +25,7 @@ export function HeroSection() {
               className="animate-fade-up text-4xl md:text-5xl font-display font-bold tracking-tight leading-[1.1] mb-6"
               style={{ animationDelay: "0.1s" }}
             >
-              Control Every Rupee.
+              Control Every Paisa.
               <br />
               Build Real Wealth.
             </h1>
@@ -105,7 +105,7 @@ function HeroDashboard() {
           </div>
           <div className="flex-1 flex justify-center">
             <div className="px-4 py-1 rounded-md bg-white/[0.04] text-[10px] text-white/20 font-mono">
-              app.spendify.in
+              app.spendify.pk
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@ function HeroDashboard() {
                   Total Net Worth
                 </p>
                 <p className="text-[26px] font-semibold text-white/90 tracking-tight font-mono leading-none">
-                  ₹12,48,300
+                  Rs 18,42,500
                 </p>
                 <div className="flex items-center gap-1.5 mt-2">
                   <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400/80 bg-emerald-500/[0.08] px-1.5 py-0.5 rounded">
@@ -147,23 +147,23 @@ function HeroDashboard() {
             <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
               <div className="flex items-center gap-1.5 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/60" />
-                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">HDFC Savings</p>
+                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">HBL Savings</p>
               </div>
-              <p className="text-[13px] font-mono text-white/70">₹4,82,300</p>
+              <p className="text-[13px] font-mono text-white/70">Rs 6,45,000</p>
             </div>
             <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
               <div className="flex items-center gap-1.5 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-400/40" />
-                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">Paytm Wallet</p>
+                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">Easypaisa</p>
               </div>
-              <p className="text-[13px] font-mono text-white/70">₹3,200</p>
+              <p className="text-[13px] font-mono text-white/70">Rs 8,400</p>
             </div>
             <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
               <div className="flex items-center gap-1.5 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-400/50" />
-                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">ICICI Credit</p>
+                <p className="text-[9px] text-white/25 uppercase tracking-wider truncate">Meezan Card</p>
               </div>
-              <p className="text-[13px] font-mono text-white/70">₹1,24,500</p>
+              <p className="text-[13px] font-mono text-white/70">Rs 1,85,000</p>
               <span className="text-[8px] text-amber-400/60 mt-1 inline-block">Due 15d</span>
             </div>
           </div>
@@ -172,9 +172,9 @@ function HeroDashboard() {
           <div>
             <p className="text-[9px] text-white/20 uppercase tracking-[0.15em] mb-2.5">Recent Transactions</p>
             <div>
-              <TransactionRow initials="SW" name="Swiggy" amount="−₹486" color="orange" negative />
-              <TransactionRow initials="SA" name="Salary" amount="+₹1,20,000" color="emerald" positive />
-              <TransactionRow initials="EB" name="Electricity" amount="−₹2,340" color="yellow" negative last />
+              <TransactionRow initials="FP" name="Foodpanda" amount="−Rs 1,250" color="orange" negative />
+              <TransactionRow initials="SA" name="Salary" amount="+Rs 1,85,000" color="emerald" positive />
+              <TransactionRow initials="KE" name="K-Electric" amount="−Rs 6,500" color="yellow" negative last />
             </div>
           </div>
         </div>

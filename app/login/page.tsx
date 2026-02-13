@@ -106,7 +106,7 @@ export default function LoginPage() {
 
           {/* Bottom quote */}
           <div className="text-[13px] text-[#6B7280] italic font-display">
-            &ldquo;Control every rupee. Build real wealth.&rdquo;
+            &ldquo;Control every paisa. Build real wealth.&rdquo;
           </div>
         </div>
       </div>

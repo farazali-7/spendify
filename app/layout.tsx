@@ -22,7 +22,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Spendify — Financial Clarity, Engineered",
   description:
-    "Full visibility across your bank accounts, cash, liabilities, and spending patterns. Control every rupee. Build real wealth.",
+    "Full visibility across your bank accounts, cash, liabilities, and spending patterns. Control every paisa. Build real wealth.",
 };
 
 export default function RootLayout({

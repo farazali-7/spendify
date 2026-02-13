@@ -141,7 +141,7 @@ export default function SignupPage() {
             <p className="text-[#A0A5AD] text-[15px] leading-relaxed mb-10">
               Join thousands who&apos;ve stopped guessing about their money.
               Spendify brings all your accounts, cash, and goals into one
-              intelligent view — built for how Indians actually manage money.
+              intelligent view — built for how Pakistanis actually manage money.
             </p>
 
             {/* Benefits */}
