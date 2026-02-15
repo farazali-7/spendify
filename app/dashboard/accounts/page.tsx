@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Building2,
   Landmark,
@@ -12,10 +12,13 @@ import {
   ArrowDownRight,
   Eye,
   Pencil,
-  Archive,
+  Trash2,
   LayoutGrid,
   List,
   Wallet,
+  Loader2,
+  Check,
+  X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -57,66 +60,31 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import type {
+  AccountWithBalance,
+  AccountType,
+  ApiResponse,
+} from "@/types/database";
 
-// ─── Types ──────────────────────────────────────────────────
+// ─── API Helpers ────────────────────────────────────────────
 
-type AccountType = "Bank" | "Digital Wallet" | "Cash";
-
-interface Account {
-  id: string;
-  name: string;
-  type: AccountType;
-  balance: number;
-  monthlyIn: number;
-  monthlyOut: number;
-  lastUpdated: string;
-  icon: LucideIcon;
+async function apiFetch<T>(url: string): Promise<T> {
+  const res = await fetch(url);
+  const json: ApiResponse<T> = await res.json();
+  if (!json.success) throw new Error(json.error);
+  return json.data;
 }
 
-// ─── Mock Data ──────────────────────────────────────────────
-
-const accounts: Account[] = [
-  {
-    id: "1",
-    name: "Meezan Bank",
-    type: "Bank",
-    balance: 185000,
-    monthlyIn: 230000,
-    monthlyOut: 45000,
-    lastUpdated: "Feb 10, 2026",
-    icon: Building2,
-  },
-  {
-    id: "2",
-    name: "HBL",
-    type: "Bank",
-    balance: 92000,
-    monthlyIn: 45000,
-    monthlyOut: 36300,
-    lastUpdated: "Feb 9, 2026",
-    icon: Landmark,
-  },
-  {
-    id: "3",
-    name: "JazzCash",
-    type: "Digital Wallet",
-    balance: 34500,
-    monthlyIn: 15000,
-    monthlyOut: 8340,
-    lastUpdated: "Feb 8, 2026",
-    icon: Smartphone,
-  },
-  {
-    id: "4",
-    name: "Cash",
-    type: "Cash",
-    balance: 13000,
-    monthlyIn: 5000,
-    monthlyOut: 3000,
-    lastUpdated: "Feb 7, 2026",
-    icon: Banknote,
-  },
-];
+async function apiPost<T>(url: string, body: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const json: ApiResponse<T> = await res.json();
+  if (!json.success) throw new Error(json.error);
+  return json.data;
+}
 
 // ─── Helpers ────────────────────────────────────────────────
 
@@ -124,10 +92,27 @@ function formatRs(v: number) {
   return `Rs ${v.toLocaleString("en-PK")}`;
 }
 
+type DisplayAccountType = "Bank" | "Wallet" | "Cash" | "Savings";
+
+const typeLabels: Record<AccountType, DisplayAccountType> = {
+  bank: "Bank",
+  wallet: "Wallet",
+  cash: "Cash",
+  savings: "Savings",
+};
+
+const typeIcons: Record<AccountType, LucideIcon> = {
+  bank: Building2,
+  wallet: Smartphone,
+  cash: Banknote,
+  savings: Landmark,
+};
+
 const typeBadgeStyles: Record<AccountType, string> = {
-  Bank: "bg-vault-info-light text-vault-info",
-  "Digital Wallet": "bg-[rgba(155,139,170,0.15)] text-vault-chart-5",
-  Cash: "bg-vault-warning-light text-vault-warning",
+  bank: "bg-vault-info-light text-vault-info",
+  wallet: "bg-[rgba(155,139,170,0.15)] text-vault-chart-5",
+  cash: "bg-vault-warning-light text-vault-warning",
+  savings: "bg-vault-positive-light text-vault-positive",
 };
 
 const chartColors = [
@@ -135,6 +120,8 @@ const chartColors = [
   "var(--vault-chart-2)",
   "var(--vault-chart-3)",
   "var(--vault-chart-6)",
+  "var(--vault-chart-4)",
+  "var(--vault-chart-5)",
 ];
 
 // ─── Chart Tooltip ──────────────────────────────────────────
@@ -198,22 +185,43 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
 // ─── Page ───────────────────────────────────────────────────
 
 export default function AccountsPage() {
+  // ── Data state ──
+  const [accounts, setAccounts] = useState<AccountWithBalance[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  // ── Filter state ──
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"All" | AccountType>("All");
+  const [typeFilter, setTypeFilter] = useState<"all" | AccountType>("all");
   const [sortBy, setSortBy] = useState<
-    "balance-desc" | "balance-asc" | "updated" | "name"
+    "balance-desc" | "balance-asc" | "recent" | "name"
   >("balance-desc");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+  // ── Modal state ──
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newAccount, setNewAccount] = useState({
     name: "",
-    type: "Bank" as AccountType,
-    balance: "",
-    currency: "PKR",
+    type: "bank" as AccountType,
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-  // ── Derived data ──
+  // ── Data fetching ──
+  const fetchAccounts = useCallback(async () => {
+    try {
+      const data = await apiFetch<AccountWithBalance[]>("/api/accounts");
+      setAccounts(data);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
+  useEffect(() => {
+    fetchAccounts();
+  }, [fetchAccounts]);
+
+  // ── Filtered & sorted ──
   const filteredAccounts = useMemo(() => {
     let result = [...accounts];
 
@@ -223,7 +231,7 @@ export default function AccountsPage() {
       );
     }
 
-    if (typeFilter !== "All") {
+    if (typeFilter !== "all") {
       result = result.filter((a) => a.type === typeFilter);
     }
 
@@ -234,7 +242,11 @@ export default function AccountsPage() {
       case "balance-asc":
         result.sort((a, b) => a.balance - b.balance);
         break;
-      case "updated":
+      case "recent":
+        result.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
         break;
       case "name":
         result.sort((a, b) => a.name.localeCompare(b.name));
@@ -242,23 +254,62 @@ export default function AccountsPage() {
     }
 
     return result;
-  }, [searchQuery, typeFilter, sortBy]);
+  }, [accounts, searchQuery, typeFilter, sortBy]);
 
-  const totalBalance = accounts.reduce((sum, a) => sum + a.balance, 0);
-  const highestAccount = accounts.reduce(
-    (max, a) => (a.balance > max.balance ? a : max),
-    accounts[0]
-  );
-  const lowestAccount = accounts.reduce(
-    (min, a) => (a.balance < min.balance ? a : min),
-    accounts[0]
-  );
-  const totalMonthlyIn = accounts.reduce((sum, a) => sum + a.monthlyIn, 0);
-  const totalMonthlyOut = accounts.reduce((sum, a) => sum + a.monthlyOut, 0);
+  // ── KPIs ──
+  const totalBalance = accounts.reduce((sum, a) => sum + Number(a.balance), 0);
+  const highestAccount =
+    accounts.length > 0
+      ? accounts.reduce((max, a) =>
+          Number(a.balance) > Number(max.balance) ? a : max
+        )
+      : null;
+  const lowestAccount =
+    accounts.length > 0
+      ? accounts.reduce((min, a) =>
+          Number(a.balance) < Number(min.balance) ? a : min
+        )
+      : null;
 
-  function handleCreateAccount() {
-    setNewAccount({ name: "", type: "Bank", balance: "", currency: "PKR" });
-    setIsAddModalOpen(false);
+  // ── Form handlers ──
+  function validateForm() {
+    const errors: Record<string, string> = {};
+    if (!newAccount.name.trim()) errors.name = "Account name is required";
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
+  async function handleCreateAccount() {
+    if (!validateForm()) return;
+
+    setSubmitLoading(true);
+    setSubmitError("");
+
+    try {
+      await apiPost("/api/accounts", {
+        name: newAccount.name.trim(),
+        type: newAccount.type,
+      });
+
+      setNewAccount({ name: "", type: "bank" });
+      setFormErrors({});
+      setIsAddModalOpen(false);
+      fetchAccounts();
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Failed to create account"
+      );
+    } finally {
+      setSubmitLoading(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      </div>
+    );
   }
 
   return (
@@ -277,7 +328,12 @@ export default function AccountsPage() {
           <Button
             size="lg"
             className="rounded-xl"
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={() => {
+              setNewAccount({ name: "", type: "bank" });
+              setFormErrors({});
+              setSubmitError("");
+              setIsAddModalOpen(true);
+            }}
           >
             <Plus className="size-4" />
             Add Account
@@ -297,7 +353,7 @@ export default function AccountsPage() {
               {formatRs(totalBalance)}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Across {accounts.length} accounts
+              Across {accounts.length} account{accounts.length !== 1 ? "s" : ""}
             </p>
           </div>
 
@@ -307,10 +363,10 @@ export default function AccountsPage() {
               Highest Balance
             </p>
             <p className="mt-1 text-2xl font-semibold tabular-nums tracking-tight text-foreground">
-              {formatRs(highestAccount.balance)}
+              {highestAccount ? formatRs(Number(highestAccount.balance)) : "—"}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              {highestAccount.name}
+              {highestAccount?.name ?? "No accounts"}
             </p>
           </div>
 
@@ -320,30 +376,25 @@ export default function AccountsPage() {
               Lowest Balance
             </p>
             <p className="mt-1 text-2xl font-semibold tabular-nums tracking-tight text-foreground">
-              {formatRs(lowestAccount.balance)}
+              {lowestAccount ? formatRs(Number(lowestAccount.balance)) : "—"}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              {lowestAccount.name}
+              {lowestAccount?.name ?? "No accounts"}
             </p>
           </div>
 
-          {/* Monthly Flow */}
+          {/* Account Count */}
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
             <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-              Monthly Flow
+              Total Accounts
             </p>
-            <div className="mt-1 flex items-center gap-1.5">
-              <ArrowUpRight className="size-3.5 text-vault-positive" />
-              <span className="text-sm font-semibold tabular-nums text-vault-positive">
-                {formatRs(totalMonthlyIn)}
-              </span>
-            </div>
-            <div className="mt-0.5 flex items-center gap-1.5">
-              <ArrowDownRight className="size-3.5 text-vault-negative" />
-              <span className="text-sm font-semibold tabular-nums text-vault-negative">
-                {formatRs(totalMonthlyOut)}
-              </span>
-            </div>
+            <p className="mt-1 text-2xl font-semibold tabular-nums tracking-tight text-foreground">
+              {accounts.length}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {accounts.filter((a) => a.type === "bank").length} bank,{" "}
+              {accounts.filter((a) => a.type !== "bank").length} other
+            </p>
           </div>
         </div>
       </section>
@@ -366,18 +417,17 @@ export default function AccountsPage() {
             {/* Type Filter */}
             <Select
               value={typeFilter}
-              onValueChange={(v) =>
-                setTypeFilter(v as "All" | AccountType)
-              }
+              onValueChange={(v) => setTypeFilter(v as "all" | AccountType)}
             >
               <SelectTrigger className="w-[160px]">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="All">All Types</SelectItem>
-                <SelectItem value="Bank">Bank</SelectItem>
-                <SelectItem value="Digital Wallet">Digital Wallet</SelectItem>
-                <SelectItem value="Cash">Cash</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="bank">Bank</SelectItem>
+                <SelectItem value="wallet">Wallet</SelectItem>
+                <SelectItem value="cash">Cash</SelectItem>
+                <SelectItem value="savings">Savings</SelectItem>
               </SelectContent>
             </Select>
 
@@ -386,7 +436,7 @@ export default function AccountsPage() {
               value={sortBy}
               onValueChange={(v) =>
                 setSortBy(
-                  v as "balance-desc" | "balance-asc" | "updated" | "name"
+                  v as "balance-desc" | "balance-asc" | "recent" | "name"
                 )
               }
             >
@@ -396,7 +446,7 @@ export default function AccountsPage() {
               <SelectContent>
                 <SelectItem value="balance-desc">Balance: High to Low</SelectItem>
                 <SelectItem value="balance-asc">Balance: Low to High</SelectItem>
-                <SelectItem value="updated">Recently Updated</SelectItem>
+                <SelectItem value="recent">Recently Added</SelectItem>
                 <SelectItem value="name">Name: A to Z</SelectItem>
               </SelectContent>
             </Select>
@@ -427,82 +477,87 @@ export default function AccountsPage() {
       {/* ── 4. Accounts Grid / Table ── */}
       <section>
         {filteredAccounts.length === 0 ? (
-          <EmptyState onAdd={() => setIsAddModalOpen(true)} />
+          <EmptyState
+            onAdd={() => {
+              setNewAccount({ name: "", type: "bank" });
+              setFormErrors({});
+              setSubmitError("");
+              setIsAddModalOpen(true);
+            }}
+          />
         ) : viewMode === "grid" ? (
           /* Grid View */
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {filteredAccounts.map((account) => (
-              <div
-                key={account.id}
-                className="rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
-              >
-                {/* Top: icon + badge */}
-                <div className="flex items-center justify-between">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-muted/60 text-muted-foreground">
-                    <account.icon className="size-[18px]" />
+            {filteredAccounts.map((account) => {
+              const Icon = typeIcons[account.type];
+              return (
+                <div
+                  key={account.id}
+                  className="rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
+                >
+                  {/* Top: icon + badge */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex size-10 items-center justify-center rounded-xl bg-muted/60 text-muted-foreground">
+                      <Icon className="size-[18px]" />
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className={cn(
+                        "text-[10px] font-medium",
+                        typeBadgeStyles[account.type]
+                      )}
+                    >
+                      {typeLabels[account.type]}
+                    </Badge>
                   </div>
-                  <Badge
-                    variant="secondary"
+
+                  {/* Name */}
+                  <h3 className="mt-4 text-sm font-medium text-foreground">
+                    {account.name}
+                  </h3>
+
+                  {/* Balance */}
+                  <p
                     className={cn(
-                      "text-[10px] font-medium",
-                      typeBadgeStyles[account.type]
+                      "mt-1 text-2xl font-semibold tabular-nums tracking-tight",
+                      Number(account.balance) >= 0
+                        ? "text-foreground"
+                        : "text-vault-negative"
                     )}
                   >
-                    {account.type}
-                  </Badge>
+                    {formatRs(Number(account.balance))}
+                  </p>
+
+                  {/* Actions */}
+                  <div className="mt-4 flex items-center gap-2 border-t border-border pt-4">
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      className="text-muted-foreground"
+                    >
+                      <Eye className="size-3" />
+                      View
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      className="text-muted-foreground"
+                    >
+                      <Pencil className="size-3" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      className="ml-auto text-vault-negative/70 hover:text-vault-negative"
+                    >
+                      <Trash2 className="size-3" />
+                      Delete
+                    </Button>
+                  </div>
                 </div>
-
-                {/* Name */}
-                <h3 className="mt-4 text-sm font-medium text-foreground">
-                  {account.name}
-                </h3>
-
-                {/* Balance */}
-                <p className="mt-1 text-2xl font-semibold tabular-nums tracking-tight text-foreground">
-                  {formatRs(account.balance)}
-                </p>
-
-                {/* Monthly flow */}
-                <div className="mt-3 flex items-center gap-4 text-xs">
-                  <span className="flex items-center gap-1 text-vault-positive">
-                    <ArrowUpRight className="size-3" />
-                    {formatRs(account.monthlyIn)}
-                  </span>
-                  <span className="flex items-center gap-1 text-vault-negative">
-                    <ArrowDownRight className="size-3" />
-                    {formatRs(account.monthlyOut)}
-                  </span>
-                </div>
-
-                {/* Actions */}
-                <div className="mt-4 flex items-center gap-2 border-t border-border pt-4">
-                  <Button
-                    variant="ghost"
-                    size="xs"
-                    className="text-muted-foreground"
-                  >
-                    <Eye className="size-3" />
-                    View
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="xs"
-                    className="text-muted-foreground"
-                  >
-                    <Pencil className="size-3" />
-                    Edit
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="xs"
-                    className="ml-auto text-muted-foreground"
-                  >
-                    <Archive className="size-3" />
-                    Archive
-                  </Button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           /* Table View */
@@ -513,63 +568,76 @@ export default function AccountsPage() {
                   <TableHead className="pl-4">Account</TableHead>
                   <TableHead>Type</TableHead>
                   <TableHead className="text-right">Balance</TableHead>
-                  <TableHead className="text-right">Monthly In</TableHead>
-                  <TableHead className="text-right">Monthly Out</TableHead>
-                  <TableHead>Last Updated</TableHead>
+                  <TableHead>Created</TableHead>
                   <TableHead className="pr-4 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredAccounts.map((account) => (
-                  <TableRow key={account.id}>
-                    <TableCell className="pl-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex size-8 items-center justify-center rounded-lg bg-muted/60 text-muted-foreground">
-                          <account.icon className="size-4" />
+                {filteredAccounts.map((account) => {
+                  const Icon = typeIcons[account.type];
+                  return (
+                    <TableRow key={account.id}>
+                      <TableCell className="pl-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex size-8 items-center justify-center rounded-lg bg-muted/60 text-muted-foreground">
+                            <Icon className="size-4" />
+                          </div>
+                          <span className="text-sm font-medium text-foreground">
+                            {account.name}
+                          </span>
                         </div>
-                        <span className="text-sm font-medium text-foreground">
-                          {account.name}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="secondary"
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant="secondary"
+                          className={cn(
+                            "text-[10px]",
+                            typeBadgeStyles[account.type]
+                          )}
+                        >
+                          {typeLabels[account.type]}
+                        </Badge>
+                      </TableCell>
+                      <TableCell
                         className={cn(
-                          "text-[10px]",
-                          typeBadgeStyles[account.type]
+                          "text-right text-sm font-semibold tabular-nums",
+                          Number(account.balance) >= 0
+                            ? "text-foreground"
+                            : "text-vault-negative"
                         )}
                       >
-                        {account.type}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-semibold tabular-nums text-foreground">
-                      {formatRs(account.balance)}
-                    </TableCell>
-                    <TableCell className="text-right text-sm tabular-nums text-vault-positive">
-                      +{formatRs(account.monthlyIn)}
-                    </TableCell>
-                    <TableCell className="text-right text-sm tabular-nums text-vault-negative">
-                      -{formatRs(account.monthlyOut)}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {account.lastUpdated}
-                    </TableCell>
-                    <TableCell className="pr-4 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon-xs">
-                          <Eye className="size-3" />
-                        </Button>
-                        <Button variant="ghost" size="icon-xs">
-                          <Pencil className="size-3" />
-                        </Button>
-                        <Button variant="ghost" size="icon-xs">
-                          <Archive className="size-3" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                        {formatRs(Number(account.balance))}
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {new Date(account.created_at).toLocaleDateString(
+                          "en-PK",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          }
+                        )}
+                      </TableCell>
+                      <TableCell className="pr-4 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Button variant="ghost" size="icon-xs">
+                            <Eye className="size-3" />
+                          </Button>
+                          <Button variant="ghost" size="icon-xs">
+                            <Pencil className="size-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon-xs"
+                            className="text-vault-negative/70 hover:text-vault-negative"
+                          >
+                            <Trash2 className="size-3" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
@@ -577,57 +645,62 @@ export default function AccountsPage() {
       </section>
 
       {/* ── 5. Account Distribution Chart ── */}
-      <section>
-        <div className="mb-4">
-          <h2 className="text-base font-semibold text-foreground">
-            Account Distribution
-          </h2>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            Balance breakdown across all accounts
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-          <div className="h-[260px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={accounts.map((a) => ({
-                  name: a.name,
-                  balance: a.balance,
-                }))}
-                margin={{ top: 5, right: 5, left: -20, bottom: 0 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="var(--border)"
-                  vertical={false}
-                />
-                <XAxis
-                  dataKey="name"
-                  tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis
-                  tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-                />
-                <RechartsTooltip
-                  content={<ChartTooltipContent />}
-                  cursor={{ fill: "var(--muted)", opacity: 0.3 }}
-                />
-                <Bar dataKey="balance" radius={[4, 4, 0, 0]} maxBarSize={48}>
-                  {accounts.map((_, index) => (
-                    <Cell key={index} fill={chartColors[index]} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+      {accounts.length > 0 && (
+        <section>
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-foreground">
+              Account Distribution
+            </h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Balance breakdown across all accounts
+            </p>
           </div>
-        </div>
-      </section>
+
+          <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+            <div className="h-[260px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={accounts.map((a) => ({
+                    name: a.name,
+                    balance: Number(a.balance),
+                  }))}
+                  margin={{ top: 5, right: 5, left: -20, bottom: 0 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="var(--border)"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+                  />
+                  <RechartsTooltip
+                    content={<ChartTooltipContent />}
+                    cursor={{ fill: "var(--muted)", opacity: 0.3 }}
+                  />
+                  <Bar dataKey="balance" radius={[4, 4, 0, 0]} maxBarSize={48}>
+                    {accounts.map((_, index) => (
+                      <Cell
+                        key={index}
+                        fill={chartColors[index % chartColors.length]}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── 6. Add Account Modal ── */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
@@ -639,6 +712,12 @@ export default function AccountsPage() {
             </DialogDescription>
           </DialogHeader>
 
+          {submitError && (
+            <div className="rounded-lg border border-vault-negative/30 bg-vault-negative-light px-3 py-2 text-sm text-vault-negative">
+              {submitError}
+            </div>
+          )}
+
           <div className="space-y-4 py-2">
             <div className="space-y-2">
               <Label htmlFor="account-name">Account Name</Label>
@@ -649,7 +728,13 @@ export default function AccountsPage() {
                 onChange={(e) =>
                   setNewAccount((prev) => ({ ...prev, name: e.target.value }))
                 }
+                className={cn(formErrors.name && "border-vault-negative")}
               />
+              {formErrors.name && (
+                <p className="text-[11px] text-vault-negative">
+                  {formErrors.name}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -667,44 +752,10 @@ export default function AccountsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Bank">Bank</SelectItem>
-                  <SelectItem value="Digital Wallet">Digital Wallet</SelectItem>
-                  <SelectItem value="Cash">Cash</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="balance">Opening Balance</Label>
-              <Input
-                id="balance"
-                type="number"
-                placeholder="0"
-                value={newAccount.balance}
-                onChange={(e) =>
-                  setNewAccount((prev) => ({
-                    ...prev,
-                    balance: e.target.value,
-                  }))
-                }
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Currency</Label>
-              <Select
-                value={newAccount.currency}
-                onValueChange={(v) =>
-                  setNewAccount((prev) => ({ ...prev, currency: v }))
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="PKR">PKR - Pakistani Rupee</SelectItem>
-                  <SelectItem value="USD">USD - US Dollar</SelectItem>
-                  <SelectItem value="GBP">GBP - British Pound</SelectItem>
+                  <SelectItem value="bank">Bank</SelectItem>
+                  <SelectItem value="cash">Cash</SelectItem>
+                  <SelectItem value="wallet">Wallet</SelectItem>
+                  <SelectItem value="savings">Savings</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -717,7 +768,10 @@ export default function AccountsPage() {
             >
               Cancel
             </Button>
-            <Button onClick={handleCreateAccount}>Create Account</Button>
+            <Button onClick={handleCreateAccount} disabled={submitLoading}>
+              {submitLoading && <Loader2 className="size-4 animate-spin" />}
+              Create Account
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
