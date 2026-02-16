@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   ArrowUpRight,
   ArrowDownRight,
+  ArrowLeftRight,
   ChevronRight,
   Building2,
   Landmark,
@@ -280,40 +281,48 @@ function AccountCard({ account }: { account: AccountWithBalance }) {
 
 function TransactionRow({ tx }: { tx: TransactionWithDetails }) {
   const isIncome = tx.type === "income";
+  const isTransfer = tx.type === "transfer";
   const amount = Number(tx.amount);
+
+  const iconClass = isTransfer
+    ? "bg-vault-info-light text-vault-info"
+    : isIncome
+      ? "bg-vault-positive-light text-vault-positive"
+      : "bg-vault-negative-light text-vault-negative";
+
+  const Icon = isTransfer ? ArrowLeftRight : isIncome ? ArrowUpRight : ArrowDownRight;
+
+  const label = isTransfer
+    ? tx.description || "Transfer"
+    : tx.description || tx.category?.name || "";
+
+  const subtitle = isTransfer
+    ? `${tx.transfer_from_account?.name ?? "—"} → ${tx.transfer_to_account?.name ?? "—"}`
+    : `${tx.category?.name ?? ""} · ${tx.account.name}`;
+
+  const amountPrefix = isTransfer ? "" : isIncome ? "+" : "-";
+  const amountClass = isTransfer
+    ? "text-vault-info"
+    : isIncome
+      ? "text-vault-positive"
+      : "text-foreground";
 
   return (
     <div className="flex items-center justify-between border-b border-border/50 px-5 py-3.5 last:border-0 transition-colors hover:bg-muted/30">
       <div className="flex items-center gap-3">
         <div
-          className={`flex size-9 items-center justify-center rounded-lg ${
-            isIncome
-              ? "bg-vault-positive-light text-vault-positive"
-              : "bg-vault-negative-light text-vault-negative"
-          }`}
+          className={`flex size-9 items-center justify-center rounded-lg ${iconClass}`}
         >
-          {isIncome ? (
-            <ArrowUpRight className="size-4" />
-          ) : (
-            <ArrowDownRight className="size-4" />
-          )}
+          <Icon className="size-4" />
         </div>
         <div>
-          <p className="text-sm font-medium text-foreground">
-            {tx.description || tx.category.name}
-          </p>
-          <p className="text-[11px] text-muted-foreground">
-            {tx.category.name} &middot; {tx.account.name}
-          </p>
+          <p className="text-sm font-medium text-foreground">{label}</p>
+          <p className="text-[11px] text-muted-foreground">{subtitle}</p>
         </div>
       </div>
       <div className="text-right">
-        <p
-          className={`text-sm font-semibold tabular-nums ${
-            isIncome ? "text-vault-positive" : "text-foreground"
-          }`}
-        >
-          {isIncome ? "+" : "-"}Rs {amount.toLocaleString("en-PK")}
+        <p className={`text-sm font-semibold tabular-nums ${amountClass}`}>
+          {amountPrefix}Rs {amount.toLocaleString("en-PK")}
         </p>
         <p className="text-[11px] text-muted-foreground">
           {new Date(tx.transaction_date).toLocaleDateString("en-PK", {

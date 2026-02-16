@@ -204,6 +204,7 @@ export default function AccountsPage() {
   const [newAccount, setNewAccount] = useState({
     name: "",
     type: "bank" as AccountType,
+    opening_balance: "",
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
@@ -289,9 +290,12 @@ export default function AccountsPage() {
       await apiPost("/api/accounts", {
         name: newAccount.name.trim(),
         type: newAccount.type,
+        opening_balance: newAccount.opening_balance
+          ? parseFloat(newAccount.opening_balance)
+          : 0,
       });
 
-      setNewAccount({ name: "", type: "bank" });
+      setNewAccount({ name: "", type: "bank", opening_balance: "" });
       setFormErrors({});
       setIsAddModalOpen(false);
       fetchAccounts();
@@ -329,7 +333,7 @@ export default function AccountsPage() {
             size="lg"
             className="rounded-xl"
             onClick={() => {
-              setNewAccount({ name: "", type: "bank" });
+              setNewAccount({ name: "", type: "bank", opening_balance: "" });
               setFormErrors({});
               setSubmitError("");
               setIsAddModalOpen(true);
@@ -479,7 +483,7 @@ export default function AccountsPage() {
         {filteredAccounts.length === 0 ? (
           <EmptyState
             onAdd={() => {
-              setNewAccount({ name: "", type: "bank" });
+              setNewAccount({ name: "", type: "bank", opening_balance: "" });
               setFormErrors({});
               setSubmitError("");
               setIsAddModalOpen(true);
@@ -758,6 +762,30 @@ export default function AccountsPage() {
                   <SelectItem value="savings">Savings</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="opening-balance">
+                Opening Balance{" "}
+                <span className="font-normal text-muted-foreground">
+                  (optional)
+                </span>
+              </Label>
+              <Input
+                id="opening-balance"
+                type="number"
+                placeholder="0"
+                value={newAccount.opening_balance}
+                onChange={(e) =>
+                  setNewAccount((prev) => ({
+                    ...prev,
+                    opening_balance: e.target.value,
+                  }))
+                }
+              />
+              <p className="text-[11px] text-muted-foreground">
+                Starting balance for this account. Does not count as income.
+              </p>
             </div>
           </div>
 
